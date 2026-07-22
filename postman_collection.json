@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "ab3d2c14-9f88-4a5f-9e8a-12b2e8c2a39d",
+		"name": "Hindu Astrology API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Astrology",
+			"item": [
+				{
+					"name": "Get Panchang",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"dob\": \"1990-01-01\",\n    \"time\": \"12:30:00\",\n    \"latitude\": 19.0760,\n    \"longitude\": 72.8777,\n    \"timezone\": \"Asia/Kolkata\",\n    \"ayanamsa\": \"Lahiri\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/astrology/panchang",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"astrology",
+								"panchang"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Kundli",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"dob\": \"1990-01-01\",\n    \"time\": \"12:30:00\",\n    \"latitude\": 19.0760,\n    \"longitude\": 72.8777,\n    \"timezone\": \"Asia/Kolkata\",\n    \"ayanamsa\": \"Lahiri\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/astrology/kundli",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"astrology",
+								"kundli"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "api_key",
+			"value": "your_test_api_key_here"
+		}
+	]
+}

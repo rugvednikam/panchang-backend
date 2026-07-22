@@ -1,0 +1,10 @@
+
+LANGUAGES = ['en', 'hi', 'mr', 'sa', 'gu', 'bn', 'ta', 'te', 'kn', 'ml', 'pa', 'or', 'as', 'ne', 'bho', 'ur', 'fr', 'de', 'es', 'ru']
+LANG_NAMES = {'en': 'English', 'hi': 'Hindi', 'mr': 'Marathi', 'sa': 'Sanskrit', 'gu': 'Gujarati', 'bn': 'Bengali', 'ta': 'Tamil', 'te': 'Telugu', 'kn': 'Kannada', 'ml': 'Malayalam', 'pa': 'Punjabi', 'or': 'Odia', 'as': 'Assamese', 'ne': 'Nepali', 'bho': 'Bhojpuri', 'ur': 'Urdu', 'fr': 'French', 'de': 'German', 'es': 'Spanish', 'ru': 'Russian'}
+TRANSLATIONS = {'tithi': {'en': 'Tithi', 'hi': 'तिथि', 'mr': 'तिथी', 'sa': 'तिथिः', 'gu': 'તિથિ', 'bn': 'তিথি', 'ta': 'திதி', 'te': 'తిథి', 'kn': 'ತಿಥಿ', 'ml': 'തിഥി', 'pa': 'ਤਿਥੀ', 'or': 'ତିଥି', 'as': 'তিথি', 'ne': 'तिथि', 'bho': 'तिथि', 'ur': 'تتھی', 'fr': 'Tithi', 'de': 'Tithi', 'es': 'Tithi', 'ru': 'Титхи'}, 'nakshatra': {'en': 'Nakshatra', 'hi': 'नक्षत्र', 'mr': 'नक्षत्र', 'sa': 'नक्षत्रम्', 'gu': 'નક્ષત્ર', 'bn': 'নক্ষত্র', 'ta': 'நட்சத்திரம்', 'te': 'నక్షత్రం', 'kn': 'ನಕ್ಷತ್ರ', 'ml': 'നക്ഷത്രം', 'pa': 'ਨਛੱਤਰ', 'or': 'ନକ୍ଷତ୍ର', 'as': 'নক্ষত্ৰ', 'ne': 'नक्षत्र', 'bho': 'नक्षत्र', 'ur': 'نکشتر', 'fr': 'Nakshatra', 'de': 'Nakshatra', 'es': 'Nakshatra', 'ru': 'Накшатра'}, 'shubh': {'en': 'Shubh', 'hi': 'शुभ', 'mr': 'शुभ', 'sa': 'शुभम्', 'gu': 'શુભ', 'bn': 'শুভ', 'ta': 'சுபம்', 'te': 'శుభం', 'kn': 'ಶುಭ', 'ml': 'ശുഭം', 'pa': 'ਸ਼ੁਭ', 'or': 'ଶୁଭ', 'as': 'শুভ', 'ne': 'शुभ', 'bho': 'शुभ', 'ur': 'شبھ', 'fr': 'Auspicious', 'de': 'Glücklich', 'es': 'Auspicioso', 'ru': 'Благоприятный'}, 'ashubh': {'en': 'Ashubh', 'hi': 'अशुभ', 'mr': 'अशुभ', 'sa': 'अशुभम्', 'gu': 'અશુભ', 'bn': 'অশুভ', 'ta': 'அசுபம்', 'te': 'అశుభం', 'kn': 'ಅಶುಭ', 'ml': 'അശുഭം', 'pa': 'ਅਸ਼ੁਭ', 'or': 'ଅଶୁଭ', 'as': 'অশুভ', 'ne': 'अशुभ', 'bho': 'अशुभ', 'ur': 'اشبھ', 'fr': 'Inauspicieux', 'de': 'Unglücklich', 'es': 'Inauspicioso', 'ru': 'Неблагоприятный'}}
+
+def t(key, lang="en"):
+    return TRANSLATIONS.get(key, {}).get(lang, TRANSLATIONS.get(key, {}).get("en", key))
+
+def get_all_translations(lang="en"):
+    return {k: v.get(lang, v.get("en")) for k,v in TRANSLATIONS.items()}
