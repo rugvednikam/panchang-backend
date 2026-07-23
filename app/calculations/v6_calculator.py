@@ -133,6 +133,12 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0):
     rahu_map = {"Sunday": "16:30-18:00", "Monday": "07:30-09:00", "Tuesday": "15:00-16:30", "Wednesday": "12:00-13:30", "Thursday": "13:30-15:00", "Friday": "10:30-12:00", "Saturday": "09:00-10:30"}
     yamaganda_map = {"Sunday": "12:00-13:30", "Monday": "10:30-12:00", "Tuesday": "09:00-10:30", "Wednesday": "07:30-09:00", "Thursday": "06:00-07:30", "Friday": "15:00-16:30", "Saturday": "13:30-15:00"}
     gulika_map = {"Sunday": "15:00-16:30", "Monday": "13:30-15:00", "Tuesday": "12:00-13:30", "Wednesday": "10:30-12:00", "Thursday": "09:00-10:30", "Friday": "07:30-09:00", "Saturday": "06:00-07:30"}
+    
+    # Advanced UI Requirements
+    agnivas = "Earth (Auspicious)" if tithi_num in [1, 4, 7, 10, 13] else ("Sky" if tithi_num in [2, 5, 8, 11, 14] else "Pataal")
+    shivavas = "Kailash (Auspicious)" if tithi_num in [2, 9, 14] else "Nandi (Auspicious)"
+    bhadravas = "Earth" if is_bhadra and moon >= 270 else ("Pataal" if is_bhadra and moon < 180 else "Swarga") if is_bhadra else "None"
+    festivals = ["Sankashti Chaturthi"] if tithi_num == 19 else (["Ekadashi"] if tithi_num in [11, 26] else [])
     return {
         "date": str(d),
         "vara": vara,
@@ -150,6 +156,10 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0):
             "ayana": ayana,
             "ritu": ritu,
             "lunar_month": lunar_month,
+            "agnivas": agnivas,
+            "shivavas": shivavas,
+            "bhadravas": bhadravas,
+            "festivals": festivals,
         }
     }
     

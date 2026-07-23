@@ -48,6 +48,7 @@ async def get_panchang(input_data: AstrologicalInput, lang: str = "en", api_key=
     
     # Advanced calculation
     advanced_panchang = get_full_panchang(dt.date(), input_data.latitude, input_data.longitude, 12.0)
+    sun_times = get_sun_times(dt.date(), input_data.latitude, input_data.longitude)
     
     return {
         "tithi": tithi,
@@ -55,6 +56,7 @@ async def get_panchang(input_data: AstrologicalInput, lang: str = "en", api_key=
         "yoga": yoga,
         "karana": karana,
         "vara": vara,
+        "sun_times": sun_times,
         "advanced": advanced_panchang.get("advanced", {})
     }
 
