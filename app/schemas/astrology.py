@@ -10,6 +10,8 @@ class AstrologicalInput(BaseModel):
     timezone: str # e.g. 'Asia/Kolkata'
     ayanamsa: Optional[str] = "Lahiri"
     siddhant: Optional[str] = "Drik Siddhant"
+    month_type: Optional[str] = "Amavasyant"
+    outer_planets: Optional[bool] = False
 
 class MatchMakingInput(BaseModel):
     boy_name: str

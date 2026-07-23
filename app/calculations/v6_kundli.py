@@ -7,11 +7,16 @@ NAKSHATRAS = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Puna
 RASHIS = ["Mesha","Vrishabha","Mithuna","Karka","Simha","Kanya","Tula","Vrishchika","Dhanu","Makara","Kumbha","Meena"]
 def get_rashi(deg):
     return RASHIS[int(deg/30)]
-def get_kundli(dt: datetime, lat: float, lon: float):
+def get_kundli(dt: datetime, lat: float, lon: float, outer_planets: bool = False):
     jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60.0)
     swe.set_sid_mode(swe.SIDM_LAHIRI)
     planets_data = []
-    for pid, ename in PLANETS:
+    
+    planets_to_calc = list(PLANETS)
+    if outer_planets:
+        planets_to_calc.extend([(swe.URANUS, "Harshal"), (swe.NEPTUNE, "Varun"), (swe.PLUTO, "Yama")])
+        
+    for pid, ename in planets_to_calc:
         calc = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)
         deg = calc[0][0] % 360
         if pid == swe.TRUE_NODE:

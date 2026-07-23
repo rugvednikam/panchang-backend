@@ -93,7 +93,7 @@ def get_ghati_pala_vipala(target_mins: int, sunrise_mins: int) -> str:
         
     return f"{ghati:02d}:{pala:02d}:{vipala:02d}"
 
-def get_full_panchang(d: date, lat: float, lon: float, hour=12.0):
+def get_full_panchang(d: date, lat: float, lon: float, hour=12.0, month_type: str = "Amavasyant"):
     jd = swe.julday(d.year, d.month, d.day, hour)
     sun = swe.calc_ut(jd, swe.SUN)[0][0]
     moon = swe.calc_ut(jd, swe.MOON)[0][0]
@@ -126,8 +126,12 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0):
     
     # Simple lunar month calculation based on Sun and Moon diff
     lunar_month_idx = int(sun / 30)
-    if diff > 348: # Amanta system
+    if diff > 348: # Amanta system - nearing amavasya
         lunar_month_idx = (lunar_month_idx + 1) % 12
+        
+    if month_type == "Purnimant" and diff > 180: # Krishna Paksha
+        lunar_month_idx = (lunar_month_idx + 1) % 12
+        
     lunar_month = LUNAR_MONTHS[lunar_month_idx]
     
     rahu_map = {"Sunday": "16:30-18:00", "Monday": "07:30-09:00", "Tuesday": "15:00-16:30", "Wednesday": "12:00-13:30", "Thursday": "13:30-15:00", "Friday": "10:30-12:00", "Saturday": "09:00-10:30"}

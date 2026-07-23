@@ -47,7 +47,7 @@ async def get_panchang(input_data: AstrologicalInput, lang: str = "en", api_key=
     vara = PanchangCalculator.get_vara(dt)
     
     # Advanced calculation
-    advanced_panchang = get_full_panchang(dt.date(), input_data.latitude, input_data.longitude, 12.0)
+    advanced_panchang = get_full_panchang(dt.date(), input_data.latitude, input_data.longitude, 12.0, input_data.month_type)
     sun_times = get_sun_times(dt.date(), input_data.latitude, input_data.longitude)
     
     return {
@@ -122,12 +122,17 @@ async def get_all_in_one(input_data: AstrologicalInput, api_key=Depends(get_api_
     dt_only = datetime.strptime(input_data.dob, "%Y-%m-%d")
     
     # Panchang
+    advanced_panchang = get_full_panchang(dt_only.date(), input_data.latitude, input_data.longitude, 12.0, input_data.month_type)
+    sun_times = get_sun_times(dt_only.date(), input_data.latitude, input_data.longitude)
+    
     panchang_data = {
         "tithi": PanchangCalculator.get_tithi(jd),
         "nakshatra": PanchangCalculator.get_nakshatra(jd),
         "yoga": PanchangCalculator.get_yoga(jd),
         "karana": PanchangCalculator.get_karana(jd),
-        "vara": PanchangCalculator.get_vara(dt_only)
+        "vara": PanchangCalculator.get_vara(dt_only),
+        "sun_times": sun_times,
+        "advanced": advanced_panchang.get("advanced", {})
     }
     
     # Kundli
@@ -146,7 +151,7 @@ async def get_all_in_one(input_data: AstrologicalInput, api_key=Depends(get_api_
     dasha_data = DashaCalculator.get_vimshottari_dasha(moon_long, dt)
     
     # V6 Premium Extensions
-    v6_k = v6_get_kundli(dt, input_data.latitude, input_data.longitude)
+    v6_k = v6_get_kundli(dt, input_data.latitude, input_data.longitude, input_data.outer_planets)
     nak_map = get_planet_nakshatra_map(dt, input_data.latitude, input_data.longitude)
     janma_nak_idx = nak_map["Chandra"]
     
