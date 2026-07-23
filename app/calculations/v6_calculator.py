@@ -143,7 +143,7 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0, month_type: st
     shivavas = "Kailash (Auspicious)" if tithi_num in [2, 9, 14] else "Nandi (Auspicious)"
     bhadravas = "Earth" if is_bhadra and moon >= 270 else ("Pataal" if is_bhadra and moon < 180 else "Swarga") if is_bhadra else "None"
     festivals = ["Sankashti Chaturthi"] if tithi_num == 19 else (["Ekadashi"] if tithi_num in [11, 26] else [])
-    return {
+    result = {
         "date": str(d),
         "vara": vara,
         "tithi": {"number": tithi_num, "name": tithi_name, "paksha": "Shukla" if tithi_num <=15 else "Krishna"},
