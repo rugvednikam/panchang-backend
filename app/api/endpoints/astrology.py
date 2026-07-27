@@ -20,6 +20,8 @@ from app.calculations.v6_yogas import detect_yogas
 from app.calculations.v6_avastha import get_full_avastha
 from app.calculations.v6_lagna_shuddhi import check_lagna_shuddhi, get_shubh_lagna_list_for_date
 from app.calculations.v6_pdf_report import create_kundli_pdf
+from app.calculations.pdf_matchmaking import create_matchmaking_pdf
+from app.calculations.pdf_yearly import create_yearly_pdf
 from app.calculations.v6_calculator import get_full_panchang, get_sun_times, TITHIS, NAKSHATRAS, YOGAS, KARANAS, LUNAR_MONTHS
 from app.calculations.v6_kundli import get_kundli as v6_get_kundli, get_planet_nakshatra_map
 from app.calculations.v6_doshas import get_all_doshas
@@ -223,6 +225,71 @@ async def get_premium_pdf(input_data: AstrologicalInput, api_key=Depends(get_api
     os.makedirs("/tmp", exist_ok=True)
     create_kundli_pdf(filename, input_data.dob, input_data.time, input_data.latitude, input_data.longitude, kundli, avastha, panchang)
     return FileResponse(filename, filename=f"Kundli_{input_data.dob}.pdf", media_type="application/pdf")
+
+@router.post("/premium/pdf/matchmaking")
+async def get_premium_matchmaking_pdf(input_data: MatchMakingInput, api_key=Depends(get_api_key)):
+    boy_dt = datetime.strptime(f"{input_data.boy_dob} {input_data.boy_time}", "%Y-%m-%d %H:%M:%S")
+    girl_dt = datetime.strptime(f"{input_data.girl_dob} {input_data.girl_time}", "%Y-%m-%d %H:%M:%S")
+    
+    boy_jd = engine.get_julian_day(boy_dt, input_data.boy_timezone)
+    girl_jd = engine.get_julian_day(girl_dt, input_data.girl_timezone)
+    
+    boy_positions = KundliCalculator.get_planetary_positions(boy_jd)
+    girl_positions = KundliCalculator.get_planetary_positions(girl_jd)
+    
+    boy_moon = boy_positions["Moon"]["longitude"]
+    girl_moon = girl_positions["Moon"]["longitude"]
+    
+    result = MatchMakingCalculator.calculate_ashtakoota(boy_moon, girl_moon)
+    
+    filename = f"/tmp/matchmaking_{input_data.boy_dob}_{input_data.girl_dob}.pdf"
+    os.makedirs("/tmp", exist_ok=True)
+    
+    boy_details = {"name": input_data.boy_name, "dob": input_data.boy_dob, "time": input_data.boy_time, "lat": input_data.boy_latitude, "lon": input_data.boy_longitude}
+    girl_details = {"name": input_data.girl_name, "dob": input_data.girl_dob, "time": input_data.girl_time, "lat": input_data.girl_latitude, "lon": input_data.girl_longitude}
+    
+    total_score = result.get("total_score", {}).get("score", 0)
+    msg = "Excellent Match!" if total_score >= 18 else "Not Recommended."
+    
+    create_matchmaking_pdf(filename, boy_details, girl_details, result, msg)
+    return FileResponse(filename, filename=f"Matchmaking_{input_data.boy_name}_{input_data.girl_name}.pdf", media_type="application/pdf")
+
+@router.post("/premium/pdf/yearly")
+async def get_premium_yearly_pdf(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
+    dt = datetime.strptime(f"{input_data.dob} {input_data.time}", "%Y-%m-%d %H:%M:%S")
+    jd = engine.get_julian_day(dt, input_data.timezone)
+    
+    positions = KundliCalculator.get_planetary_positions(jd)
+    moon_long = positions["Moon"]["longitude"]
+    
+    dasha_data = DashaCalculator.get_vimshottari_dasha(moon_long, dt)
+    
+    # Filter dashas for the current year (or future)
+    current_year_dashas = []
+    now = datetime.now()
+    next_year = now + timedelta(days=3650) # Let's show up to 10 years of Maha Dashas for now, since antar dashas are not implemented
+    
+    for period in dasha_data.get("periods", []):
+        try:
+            start = datetime.fromisoformat(period["start_date"])
+            end = datetime.fromisoformat(period["end_date"])
+            if end >= now: # Active or future
+                current_year_dashas.append({
+                    "maha_dasha": period["planet"],
+                    "antar_dasha": "-",
+                    "start_date": start.strftime("%d-%b-%Y"),
+                    "end_date": end.strftime("%d-%b-%Y")
+                })
+        except Exception:
+            pass
+
+    filename = f"/tmp/yearly_{input_data.dob}_{input_data.time.replace(':','')}.pdf"
+    os.makedirs("/tmp", exist_ok=True)
+    
+    details = {"name": input_data.name, "dob": input_data.dob, "time": input_data.time, "lat": input_data.latitude, "lon": input_data.longitude}
+    
+    create_yearly_pdf(filename, details, current_year_dashas)
+    return FileResponse(filename, filename=f"Yearly_{input_data.name}.pdf", media_type="application/pdf")
 
 @router.post("/premium/doshas")
 async def get_premium_doshas(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
