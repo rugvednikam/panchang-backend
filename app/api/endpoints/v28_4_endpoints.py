@@ -158,8 +158,9 @@ async def get_baby_names(input_data: AstrologicalInput, api_key=Depends(get_api_
     positions = KundliCalculator.get_planetary_positions(jd)
     moon_lon = positions.get("Moon", {}).get("longitude_nirayana", 0.0)
     
-    nakshatra_number = KundliCalculator.get_nakshatra_number(moon_lon)
-    pada = KundliCalculator.get_nakshatra_pada(moon_lon)
+    nakshatra_length = 360.0 / 27.0
+    nakshatra_number = int(moon_lon / nakshatra_length) + 1
+    pada = int((moon_lon % nakshatra_length) / (nakshatra_length / 4)) + 1
     
     result = get_baby_names_by_nakshatra(nakshatra_number, pada)
     if "error" in result:
