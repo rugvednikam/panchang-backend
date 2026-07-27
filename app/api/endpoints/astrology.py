@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends
-from datetime import datetime
+from fastapi import APIRouter, Depends, Query
+from datetime import datetime, date, timedelta
 from fastapi.responses import FileResponse
 import os
+import calendar
+from typing import Optional
 from app.schemas.astrology import AstrologicalInput, MatchMakingInput, DateLocationInput
 from app.auth.api_key import get_api_key
 from app.calculations.engine import engine
@@ -18,7 +20,7 @@ from app.calculations.v6_yogas import detect_yogas
 from app.calculations.v6_avastha import get_full_avastha
 from app.calculations.v6_lagna_shuddhi import check_lagna_shuddhi, get_shubh_lagna_list_for_date
 from app.calculations.v6_pdf_report import create_kundli_pdf
-from app.calculations.v6_calculator import get_full_panchang, get_sun_times
+from app.calculations.v6_calculator import get_full_panchang, get_sun_times, TITHIS, NAKSHATRAS, YOGAS, KARANAS, LUNAR_MONTHS
 from app.calculations.v6_kundli import get_kundli as v6_get_kundli, get_planet_nakshatra_map
 from app.calculations.v6_doshas import get_all_doshas
 from app.calculations.v6_predictions import get_all_predictions
@@ -238,3 +240,104 @@ async def get_premium_predictions(input_data: AstrologicalInput, api_key=Depends
     dasha_data = DashaCalculator.get_vimshottari_dasha(moon_long, dt)
     
     return get_all_predictions(kundli, dasha_data)
+
+
+@router.post("/panchang/month")
+async def get_panchang_month(input_data: DateLocationInput, month_type: Optional[str] = Query("Amavasyant"), api_key=Depends(get_api_key)):
+    """
+    Calculate panchang summary for every day of a given month.
+    Input date determines the year and month (day is ignored).
+    Returns an array of day summaries with Tithi, Nakshatra, Yoga, Karana,
+    festivals, and special day flags (Ekadashi, Purnima, Amavasya, etc.)
+    """
+    dt = datetime.strptime(input_data.date, "%Y-%m-%d")
+    year = dt.year
+    month = dt.month
+    num_days = calendar.monthrange(year, month)[1]
+
+    days = []
+    for day_num in range(1, num_days + 1):
+        d = date(year, month, day_num)
+        try:
+            panchang = get_full_panchang(d, input_data.latitude, input_data.longitude, 12.0, month_type)
+            sun_times = get_sun_times(d, input_data.latitude, input_data.longitude)
+
+            tithi_num = panchang["tithi"]["number"]
+            tithi_name = panchang["tithi"]["name"]
+            paksha = panchang["tithi"]["paksha"]
+            nak_name = panchang["nakshatra"]["name"]
+            nak_num = panchang["nakshatra"]["number"]
+            pada = panchang["nakshatra"]["pada"]
+            yoga_name = panchang["yoga"]["name"]
+            karana_name = panchang["karana"]["name"]
+            lunar_month = panchang.get("advanced", {}).get("lunar_month", "")
+            vara = panchang.get("vara", d.strftime("%A"))
+
+            # Dynamic festival/special day detection
+            special = FestivalCalculator.get_special_days_for_tithi(tithi_num, paksha)
+            festivals = FestivalCalculator.get_festivals_for_date(d, tithi_num, paksha)
+
+            # Sankranti check
+            sankranti = FestivalCalculator.check_sankranti(d)
+
+            day_data = {
+                "date": str(d),
+                "day_of_week": d.weekday(),  # 0=Monday, 6=Sunday
+                "vara": vara,
+                "tithi_number": tithi_num,
+                "tithi_name": tithi_name,
+                "paksha": paksha,
+                "nakshatra_name": nak_name,
+                "nakshatra_number": nak_num,
+                "pada": pada,
+                "yoga_name": yoga_name,
+                "karana_name": karana_name,
+                "lunar_month": lunar_month,
+                "sunrise": sun_times.get("sunrise", "06:00"),
+                "sunset": sun_times.get("sunset", "18:00"),
+                "is_ekadashi": special["is_ekadashi"],
+                "is_purnima": special["is_purnima"],
+                "is_amavasya": special["is_amavasya"],
+                "is_chaturthi": special["is_chaturthi"],
+                "is_pradosh": special["is_pradosh"],
+                "is_sankranti": sankranti is not None,
+                "sankranti_name": sankranti,
+                "festivals": festivals,
+                "special_tag": special["special_tag"],
+            }
+            days.append(day_data)
+        except Exception as e:
+            # If a single day fails, return minimal data so the calendar isn't broken
+            days.append({
+                "date": str(d),
+                "day_of_week": d.weekday(),
+                "vara": d.strftime("%A"),
+                "tithi_number": 0,
+                "tithi_name": "",
+                "paksha": "",
+                "nakshatra_name": "",
+                "nakshatra_number": 0,
+                "pada": 0,
+                "yoga_name": "",
+                "karana_name": "",
+                "lunar_month": "",
+                "sunrise": "06:00",
+                "sunset": "18:00",
+                "is_ekadashi": False,
+                "is_purnima": False,
+                "is_amavasya": False,
+                "is_chaturthi": False,
+                "is_pradosh": False,
+                "is_sankranti": False,
+                "sankranti_name": None,
+                "festivals": [],
+                "special_tag": None,
+                "error": str(e),
+            })
+
+    return {
+        "year": year,
+        "month": month,
+        "num_days": num_days,
+        "days": days,
+    }
