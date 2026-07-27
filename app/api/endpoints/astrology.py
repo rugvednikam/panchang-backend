@@ -24,6 +24,7 @@ from app.calculations.v6_calculator import get_full_panchang, get_sun_times, TIT
 from app.calculations.v6_kundli import get_kundli as v6_get_kundli, get_planet_nakshatra_map
 from app.calculations.v6_doshas import get_all_doshas
 from app.calculations.v6_predictions import get_all_predictions
+from app.calculations.horoscope import get_daily_horoscope
 
 router = APIRouter()
 
@@ -241,6 +242,30 @@ async def get_premium_predictions(input_data: AstrologicalInput, api_key=Depends
     
     return get_all_predictions(kundli, dasha_data)
 
+
+@router.post("/horoscope/daily")
+async def get_daily_horoscope_api(input_data: AstrologicalInput, current_date: str = Query(..., description="YYYY-MM-DD"), api_key=Depends(get_api_key)):
+    # 1. Calculate Natal Moon Sign
+    dt_natal = datetime.strptime(f"{input_data.dob} {input_data.time}", "%Y-%m-%d %H:%M:%S")
+    engine.set_ayanamsa(input_data.ayanamsa)
+    jd_natal = engine.get_julian_day(dt_natal, input_data.timezone)
+    natal_positions = KundliCalculator.get_planetary_positions(jd_natal)
+    natal_moon_lon = natal_positions.get("Moon", {}).get("longitude_nirayana", 0.0)
+    natal_moon_sign = int(natal_moon_lon / 30) + 1
+    
+    # 2. Calculate Transit Moon Sign for current_date (at noon)
+    dt_transit = datetime.strptime(f"{current_date} 12:00:00", "%Y-%m-%d %H:%M:%S")
+    jd_transit = engine.get_julian_day(dt_transit, input_data.timezone)
+    transit_positions = KundliCalculator.get_planetary_positions(jd_transit)
+    transit_moon_lon = transit_positions.get("Moon", {}).get("longitude_nirayana", 0.0)
+    transit_moon_sign = int(transit_moon_lon / 30) + 1
+    
+    # 3. Get Horoscope Prediction
+    result = get_daily_horoscope(natal_moon_sign, transit_moon_sign)
+    if "error" in result:
+        return {"status": "error", "message": result["error"]}
+        
+    return {"status": "success", "feature": "Daily Horoscope Gochar", "data": result}
 
 @router.post("/panchang/month")
 async def get_panchang_month(input_data: DateLocationInput, month_type: Optional[str] = Query("Amavasyant"), api_key=Depends(get_api_key)):
