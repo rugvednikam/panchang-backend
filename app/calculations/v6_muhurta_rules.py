@@ -118,7 +118,7 @@ def check_muhurta(panchang, type, sun_times=None):
     return {"is_auspicious": is_auspicious, "score": f"{score}/{max_score}", "shubh_muhurta": "Abhijit + Labh/Amrit Choghadiya" if is_auspicious else "Avoid today", "reasons": reasons, "warnings": warnings, "type_info": MUHURTA_TYPES.get(type)}
 
 def get_all_muhurtas_for_day(d, lat, lon):
-    p = get_full_panchang(d, lat, lon)
+    p = get_full_panchang(d, lat, lon, 12.0)
     sun = get_sun_times(d, lat, lon)
     chog = get_choghadiya(d, lat, lon)
     abhijit = get_abhijit_muhurta(d, lat, lon)

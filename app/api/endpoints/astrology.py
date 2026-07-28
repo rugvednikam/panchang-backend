@@ -206,7 +206,7 @@ async def get_premium_lagna_shuddhi(input_data: AstrologicalInput, muhurta_type:
 @router.post("/premium/muhurta")
 async def get_premium_muhurta(input_data: AstrologicalInput, type: str = "Brahma", api_key=Depends(get_api_key)):
     date_val = datetime.strptime(input_data.dob, "%Y-%m-%d").date()
-    p = get_full_panchang(date_val, input_data.latitude, input_data.longitude)
+    p = get_full_panchang(date_val, input_data.latitude, input_data.longitude, 12.0)
     sun_times = get_sun_times(date_val, input_data.latitude, input_data.longitude)
     return check_muhurta(p, type, sun_times)
 
