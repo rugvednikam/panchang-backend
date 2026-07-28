@@ -19,10 +19,8 @@ async def get_api_key(
             status_code=403, detail="Could not validate API key"
         )
     
-    # Hash the supplied key
-    hashed = hash_api_key(api_key_header)
-    
-    result = await db.execute(select(APIKey).where(APIKey.hashed_key == hashed))
+    # Compare plaintext key directly to avoid environment mismatch with SECRET_KEY
+    result = await db.execute(select(APIKey).where(APIKey.hashed_key == api_key_header))
     api_key_obj = result.scalars().first()
     
     if not api_key_obj:
