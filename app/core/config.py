@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     
     # Database
-    DATABASE_URL: str = "sqlite+aiosqlite:///./astrology.db"
+    DATABASE_URL: str = "postgresql+asyncpg://panchang_db_user:EVgogec4BxJmKLY2wiXgv8xnit8zVv6u@dpg-d9k9j2p42hec73adc9s0-a.singapore-postgres.render.com/panchang_db"
     
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
