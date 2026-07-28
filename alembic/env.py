@@ -1,4 +1,10 @@
 import asyncio
+import sys
+import os
+from logging.config import fileConfig
+
+# Add the backend directory to sys.path so 'app' can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from logging.config import fileConfig
 
 from sqlalchemy import pool
