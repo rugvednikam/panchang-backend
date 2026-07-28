@@ -109,7 +109,7 @@ def check_muhurta(panchang, type, sun_times=None):
         warnings.append(f"Nakshatra {nak_name} Varjit for {type}")
     if panchang["vara"] in rule.get("good_vara", []):
         score+=1; reasons.append(f"Vara {panchang['vara']} Shubh")
-    if not panchang["bhadra"]["is_bhadra"]:
+    if panchang.get("karana", {}).get("name") != "Vishti":
         score+=1; reasons.append("No Bhadra - Shuddha")
     else:
         if type != "godhuli_lagna":  # Godhuli can ignore Bhadra in emergency
