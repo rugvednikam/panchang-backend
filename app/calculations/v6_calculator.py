@@ -1,7 +1,8 @@
-
 import swisseph as swe
 from datetime import date, datetime, timedelta
 import math
+from app.calculations.v6_advanced_daily import get_advanced_daily_info
+
 swe.set_ephe_path('.')
 NAKSHATRAS = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"]
 TITHIS = ["Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami","Shashthi","Saptami","Ashtami","Navami","Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Purnima","Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami","Shashthi","Saptami","Ashtami","Navami","Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Amavasya"]
@@ -238,6 +239,19 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0, month_type: st
         "sun_deg": round(sun,2),
         "moon_deg": round(moon,2)
     })
+    
+    # Calculate advanced daily elements
+    vaar_num = (d.isoweekday() % 7) + 1  # 1=Sunday...7=Saturday
+    rashi_num = int(moon / 30) + 1
+    result["advanced_daily"] = get_advanced_daily_info(
+        tithi_num=tithi_num,
+        vaar_num=vaar_num,
+        karana_num=karana_num,
+        nak_num=nak_num,
+        rashi_num=rashi_num,
+        sun_times=sun_times_today
+    )
+    
     return result
 
 def get_abhijit_muhurta(d: date, lat: float, lon: float):
