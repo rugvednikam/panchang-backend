@@ -62,7 +62,8 @@ async def get_panchang(input_data: AstrologicalInput, lang: str = "en", api_key=
         "karana": karana,
         "vara": vara,
         "sun_times": sun_times,
-        "advanced": advanced_panchang.get("advanced", {})
+        "advanced": advanced_panchang.get("advanced", {}),
+        "advanced_daily": advanced_panchang.get("advanced_daily", {})
     }
 
 @router.post("/kundli")
@@ -137,7 +138,8 @@ async def get_all_in_one(input_data: AstrologicalInput, api_key=Depends(get_api_
         "karana": PanchangCalculator.get_karana(jd),
         "vara": PanchangCalculator.get_vara(dt_only),
         "sun_times": sun_times,
-        "advanced": advanced_panchang.get("advanced", {})
+        "advanced": advanced_panchang.get("advanced", {}),
+        "advanced_daily": advanced_panchang.get("advanced_daily", {})
     }
     
     # Kundli
