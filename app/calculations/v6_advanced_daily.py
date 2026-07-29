@@ -123,20 +123,42 @@ def get_ghatachakra(rashi_num: int) -> Dict[str, Any]:
     return {"name": "घातचक्र (Ghatachakra)", "status": "Active", "desc": "माहिती उपलब्ध नाही"}
 
 def get_shul_chakras(vaar_num: int, tithi_num: int, nak_num: int) -> Dict[str, Any]:
-    disha_shul = {
+    # 1. Disha Shul (based on Vaar)
+    disha_shul_map = {
         1: "पश्चिम (West)", 2: "पूर्व (East)", 3: "उत्तर (North)", 
         4: "उत्तर (North)", 5: "दक्षिण (South)", 6: "पश्चिम (West)", 7: "पूर्व (East)"
     }
+    
+    # 2. Tithi Shul (based on Tithi: 1 to 30)
+    # 1,9=East, 2,10=North, 3,11=Agneya, 4,12=Nairutya, 5,13=South, 6,14=West, 7,15=Vayavya, 8,30=Ishanya
+    tithi_shul_map = {
+        1: "पूर्व (East)", 9: "पूर्व (East)", 16: "पूर्व (East)", 24: "पूर्व (East)",
+        2: "उत्तर (North)", 10: "उत्तर (North)", 17: "उत्तर (North)", 25: "उत्तर (North)",
+        3: "आग्नेय (South-East)", 11: "आग्नेय (South-East)", 18: "आग्नेय (South-East)", 26: "आग्नेय (South-East)",
+        4: "नैऋत्य (South-West)", 12: "नैऋत्य (South-West)", 19: "नैऋत्य (South-West)", 27: "नैऋत्य (South-West)",
+        5: "दक्षिण (South)", 13: "दक्षिण (South)", 20: "दक्षिण (South)", 28: "दक्षिण (South)",
+        6: "पश्चिम (West)", 14: "पश्चिम (West)", 21: "पश्चिम (West)", 29: "पश्चिम (West)",
+        7: "वायव्य (North-West)", 15: "वायव्य (North-West)", 22: "वायव्य (North-West)",
+        8: "ईशान्य (North-East)", 30: "ईशान्य (North-East)", 23: "ईशान्य (North-East)"
+    }
+
+    # 3. Nakshatra Shul (based on Nakshatra: 1 to 27)
+    nak_shul_map = {
+        18: "पूर्व (East)", 19: "पूर्व (East)", 20: "पूर्व (East)", 21: "पूर्व (East)",
+        24: "दक्षिण (South)", 25: "दक्षिण (South)", 26: "दक्षिण (South)", 27: "दक्षिण (South)",
+        4: "पश्चिम (West)", 5: "पश्चिम (West)", 6: "पश्चिम (West)", 7: "पश्चिम (West)",
+        12: "उत्तर (North)", 13: "उत्तर (North)", 14: "उत्तर (North)", 15: "उत्तर (North)"
+    }
+    
     yatra_shul = "शुभ" if vaar_num in [4,5] else "अशुभ"
     
     return {
-        "disha_shul": disha_shul.get(vaar_num, "None"),
+        "disha_shul": disha_shul_map.get(vaar_num, "शूल नाही"),
         "yatra_shul": yatra_shul,
-        "tithi_shul": "None",
-        "vaar_shul": disha_shul.get(vaar_num, "None"),
-        "nakshatra_shul": "None"
+        "tithi_shul": tithi_shul_map.get(tithi_num, "शूल नाही"),
+        "vaar_shul": disha_shul_map.get(vaar_num, "शूल नाही"),
+        "nakshatra_shul": nak_shul_map.get(nak_num, "शूल नाही (No Shul)")
     }
-
 def get_yogas_doshas(vaar_num: int, tithi_num: int, nak_num: int, sun_lon: float) -> Dict[str, Any]:
     anandadi = ["आनंद", "कालदंड", "धूम्र", "प्रजापती", "सौम्य", "कांकक्ष", "ध्वज", "श्रीवत्स", "वज्र", "मुद्गर", "छत्र", "मित्र", "मानस", "पद्म", "लुंब", "उत्पात", "मृत्यू", "काण", "सिद्धी", "शुभ", "अमृत", "मुसळ", "गद", "मातंग", "राक्षस", "चर, स्थिर", "वर्धमान"]
     idx = (nak_num + vaar_num) % 28
