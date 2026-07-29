@@ -249,6 +249,7 @@ def get_full_panchang(d: date, lat: float, lon: float, hour=12.0, month_type: st
         karana_num=karana_num,
         nak_num=nak_num,
         rashi_num=rashi_num,
+        sun_lon=sun,
         sun_times=sun_times_today
     )
     
