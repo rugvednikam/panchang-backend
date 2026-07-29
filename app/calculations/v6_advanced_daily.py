@@ -19,11 +19,11 @@ def get_agnivas(tithi_num: int, vaar_num: int) -> Dict[str, str]:
     '''
     val = (tithi_num + vaar_num + 1) % 3
     if val == 1:
-        return {"name": "à¤¸à¥ à¤µà¤°à¥ à¤— (Swarga)", "status": "Ashubh", "desc": "à¤§à¤¨ à¤¹à¤¾à¤¨à¥€ (Wealth loss) - à¤¹à¤µà¤¨ à¤¨à¤¿à¤·à¥‡à¤§"}
+        return {"name": "स्वर्ग (Swarga)", "status": "Ashubh", "desc": "धन हानी (Wealth loss) - हवन निषेध"}
     elif val == 2:
-        return {"name": "à¤ªà¤¾à¤¤à¤¾à¤³ (Patal)", "status": "Ashubh", "desc": "à¤ªà¥ à¤°à¤¾à¤£ à¤¸à¤‚à¤•à¤Ÿ (Danger) - à¤¹à¤µà¤¨ à¤¨à¤¿à¤·à¥‡à¤§"}
+        return {"name": "पाताळ (Patal)", "status": "Ashubh", "desc": "प्राण संकट (Danger) - हवन निषेध"}
     else:
-        return {"name": "à¤ªà¥ƒà¤¥à¥ à¤µà¥€ (Prithvi)", "status": "Shubh", "desc": "à¤¸à¥ à¤– à¤¶à¤¾à¤‚à¤¤à¥€ (Auspicious) - à¤¹à¤µà¤¨ à¤¶à¥ à¤­"}
+        return {"name": "पृथ्वी (Prithvi)", "status": "Shubh", "desc": "सुख शांती (Auspicious) - हवन शुभ"}
 
 def get_shivavas(tithi_num: int) -> Dict[str, str]:
     '''
@@ -33,28 +33,28 @@ def get_shivavas(tithi_num: int) -> Dict[str, str]:
     '''
     val = (tithi_num * 2 + 5) % 7
     if val == 1:
-        return {"name": "à¤•à¥ˆà¤²à¤¾à¤¸ à¤ªà¤°à¥ à¤µà¤¤", "status": "Shubh", "desc": "à¤…à¤¤à¥ à¤¯à¤‚à¤¤ à¤¶à¥ à¤­ - à¤¸à¥ à¤– à¤¶à¤¾à¤‚à¤¤à¥€"}
+        return {"name": "कैलास पर्वत", "status": "Shubh", "desc": "अत्यंत शुभ - सुख शांती"}
     elif val == 2:
-        return {"name": "à¤®à¤¾à¤¤à¤¾ à¤—à¥Œà¤°à¥€ à¤¸à¥‹à¤¬à¤¤", "status": "Shubh", "desc": "à¤¶à¥ à¤­ - à¤§à¤¨ à¤¸à¤‚à¤ªà¤¤à¥ à¤¤à¥€"}
+        return {"name": "माता गौरी सोबत", "status": "Shubh", "desc": "शुभ - धन संपत्ती"}
     elif val == 3:
-        return {"name": "à¤¨à¤‚à¤¦à¥€à¤µà¤° (Vrushabh)", "status": "Shubh", "desc": "à¤¶à¥ à¤­ - à¤•à¤¾à¤°à¥ à¤¯ à¤¸à¤¿à¤¦à¥ à¤§à¥€"}
+        return {"name": "नंदीवर (Vrushabh)", "status": "Shubh", "desc": "शुभ - कार्य सिद्धी"}
     elif val == 4:
-        return {"name": "à¤¸à¤­à¥‡à¤¤ (Sabha)", "status": "Neutral", "desc": "à¤¸à¤¾à¤®à¤¾à¤¨à¥ à¤¯ - à¤®à¤¾à¤¨à¤¸à¤¿à¤• à¤•à¥ à¤²à¥‡à¤¶"}
+        return {"name": "सभेत (Sabha)", "status": "Neutral", "desc": "सामान्य - मानसिक क्लेश"}
     elif val == 5:
-        return {"name": "à¤­à¥‹à¤œà¤¨ à¤•à¤°à¤¤ à¤†à¤¹à¥‡à¤¤", "status": "Ashubh", "desc": "à¤…à¤¶à¥ à¤­ - à¤ªà¥€à¤¡à¤¾ / à¤…à¤¡à¤¥à¤³à¥‡"}
+        return {"name": "भोजन करत आहेत", "status": "Ashubh", "desc": "अशुभ - पीडा / अडथळे"}
     elif val == 6:
-        return {"name": "à¤•à¥ à¤°à¥€à¤¡à¤¾ (Playing)", "status": "Ashubh", "desc": "à¤…à¤¶à¥ à¤­ - à¤¦à¥ à¤ƒà¤– / à¤¹à¤¾à¤¨à¥€"}
+        return {"name": "क्रीडा (Playing)", "status": "Ashubh", "desc": "अशुभ - दुःख / हानी"}
     else:
-        return {"name": "à¤¸à¥ à¤®à¤¶à¤¾à¤¨", "status": "Ashubh", "desc": "à¤…à¤¤à¥ à¤¯à¤‚à¤¤ à¤…à¤¶à¥ à¤­ - à¤®à¥ƒà¤¤à¥ à¤¯à¥‚ à¤¤à¥ à¤²à¥ à¤¯ à¤•à¤·à¥ à¤Ÿ"}
+        return {"name": "स्मशान", "status": "Ashubh", "desc": "अत्यंत अशुभ - मृत्यू तुल्य कष्ट"}
 
 def get_bhadravas(tithi_num: int, karana_num: int) -> Dict[str, str]:
     '''
     Bhadravas (Vishti Karana).
     '''
     if karana_num != 7:  # Vishti Karana is typically 7 in a cycle of 7 movable karanas
-        return {"name": "à¤­à¤¦à¥ à¤°à¤¾ à¤¨à¤¾à¤¹à¥€", "status": "Shubh", "desc": "à¤­à¤¦à¥ à¤°à¤¾ à¤¦à¥‹à¤· à¤¨à¤¾à¤¹à¥€"}
+        return {"name": "भद्रा नाही", "status": "Shubh", "desc": "भद्रा दोष नाही"}
         
-    return {"name": "à¤®à¥ƒà¤¤à¥ à¤¯à¥‚ à¤²à¥‹à¤• (Mrityu Loka)", "status": "Ashubh", "desc": "à¤¶à¥ à¤­ à¤•à¤¾à¤°à¥ à¤¯à¤¾à¤¸ à¤¨à¤¿à¤·à¥‡à¤§"}
+    return {"name": "मृत्यू लोक (Mrityu Loka)", "status": "Ashubh", "desc": "शुभ कार्यास निषेध"}
 
 def get_hom_aahuti(sun_lon: float, moon_nak_num: int) -> Dict[str, str]:
     sun_nak_num = int(sun_lon / 13.3333333333) + 1
@@ -67,48 +67,48 @@ def get_hom_aahuti(sun_lon: float, moon_nak_num: int) -> Dict[str, str]:
     val = distance % 9
     
     if val in [1, 2]:
-        return {"name": "à¤¸à¥‚à¤°à¥ à¤¯ (Surya)", "status": "Ashubh", "desc": "à¤…à¤¶à¥ à¤­ - à¤§à¤¨à¤¹à¤¾à¤¨à¥€ (Wealth loss)"}
+        return {"name": "सूर्य (Surya)", "status": "Ashubh", "desc": "अशुभ - धनहानी (Wealth loss)"}
     elif val in [3, 4]:
-        return {"name": "à¤¬à¥ à¤§ (Budha)", "status": "Shubh", "desc": "à¤¶à¥ à¤­ - à¤§à¤¨à¤µà¥ƒà¤¦à¥ à¤§à¥€ (Wealth gain)"}
+        return {"name": "बुध (Budha)", "status": "Shubh", "desc": "शुभ - धनवृद्धी (Wealth gain)"}
     elif val in [5]:
-        return {"name": "à¤¶à¥ à¤•à¥ à¤° (Shukra)", "status": "Shubh", "desc": "à¤¶à¥ à¤­ - à¤¸à¥ à¤– à¤µà¥ƒà¤¦à¥ à¤§à¥€ (Happiness)"}
+        return {"name": "शुक्र (Shukra)", "status": "Shubh", "desc": "शुभ - सुख वृद्धी (Happiness)"}
     elif val in [6, 7]:
-        return {"name": "à¤¶à¤¨à¥€ (Shani)", "status": "Ashubh", "desc": "à¤…à¤¶à¥ à¤­ - à¤¦à¥ à¤ƒà¤–/à¤•à¥ à¤²à¥‡à¤¶ (Sorrow)"}
+        return {"name": "शनी (Shani)", "status": "Ashubh", "desc": "अशुभ - दुःख/क्लेश (Sorrow)"}
     elif val in [8]:
-        return {"name": "à¤°à¤¾à¤¹à¥‚ (Rahu)", "status": "Ashubh", "desc": "à¤…à¤¶à¥ à¤­ - à¤°à¥‹à¤— / à¤•à¤·à¥ à¤Ÿ (Disease)"}
+        return {"name": "राहू (Rahu)", "status": "Ashubh", "desc": "अशुभ - रोग / कष्ट (Disease)"}
     else: # 0
-        return {"name": "à¤—à¥ à¤°à¥‚ (Guru)", "status": "Shubh", "desc": "à¤¶à¥ à¤­ - à¤•à¤¾à¤°à¥ à¤¯ à¤¸à¤¿à¤¦à¥ à¤§à¥€ (Success)"}
+        return {"name": "गुरू (Guru)", "status": "Shubh", "desc": "शुभ - कार्य सिद्धी (Success)"}
 
 def get_varjit_khadya(tithi_num: int) -> str:
     '''Forbidden food based on Tithi'''
     forbidden = {
-        1: "à¤•à¥ à¤·à¥ à¤®à¤¾à¤‚à¤¡ (à¤­à¥‹à¤ªà¤³à¤¾)", 2: "à¤¬à¥ƒà¤¹à¤¤à¥€ (à¤µà¤¾à¤‚à¤—à¥‡)", 3: "à¤ªà¤Ÿà¥‹à¤² (à¤ªà¤¡à¤µà¤³)", 4: "à¤®à¥ à¤³à¤¾", 
-        5: "à¤¬à¤¿à¤²à¥ à¤µ (à¤¬à¥‡à¤²)", 6: "à¤¨à¤¿à¤‚à¤¬", 7: "à¤¤à¤¾à¤¡ à¤«à¤³", 8: "à¤¨à¤¾à¤°à¤³", 9: "à¤²à¥Œà¤•à¥€ (à¤¦à¥ à¤§à¥€)", 
-        10: "à¤•à¤²à¤¿à¤‚à¤—à¤¡", 11: "à¤˜à¥‡à¤µà¤¡à¤¾", 12: "à¤®à¤¸à¥‚à¤°", 13: "à¤µà¤¾à¤‚à¤—à¥‡", 14: "à¤¸à¤°à¥ à¤µ à¤ªà¥ à¤°à¤•à¤¾à¤°à¤šà¥€ à¤ªà¤¾à¤¨à¥‡", 
-        15: "à¤®à¤¾à¤‚à¤¸/à¤®à¤¦à¥ à¤¯", 30: "à¤®à¤¾à¤‚à¤¸/à¤®à¤¦à¥ à¤¯"
+        1: "कुष्मांड (भोपळा)", 2: "बृहती (वांगे)", 3: "पटोल (पडवळ)", 4: "मुळा", 
+        5: "बिल्व (बेल)", 6: "निंब", 7: "ताड फळ", 8: "नारळ", 9: "लौकी (दुधी)", 
+        10: "कलिंगड", 11: "घेवडा", 12: "मसूर", 13: "वांगे", 14: "सर्व प्रकारची पाने", 
+        15: "मांस/मद्य", 30: "मांस/मद्य"
     }
-    return forbidden.get(tithi_num if tithi_num <= 15 else tithi_num - 15, "à¤•à¤¾à¤¹à¥€à¤¹à¥€ à¤¨à¤¾à¤¹à¥€")
+    return forbidden.get(tithi_num if tithi_num <= 15 else tithi_num - 15, "काहीही नाही")
 
 def get_snan_dravya(vaar_num: int) -> str:
     # Sunday=1
-    dravya = {1: "à¤°à¤•à¥ à¤¤ à¤šà¤‚à¤¦à¤¨", 2: "à¤ªà¤¾à¤‚à¤¢à¤°à¥‡ à¤šà¤‚à¤¦à¤¨", 3: "à¤²à¤¾à¤² à¤«à¥ à¤²à¥‡", 4: "à¤¦à¥ à¤°à¥ à¤µà¤¾/à¤¤à¥‚à¤ª", 5: "à¤¹à¤³à¤¦", 6: "à¤¦à¤¹à¥€", 7: "à¤•à¤¾à¤³à¥‡ à¤¤à¥€à¤³"}
-    return dravya.get(vaar_num, "à¤œà¤²")
+    dravya = {1: "रक्त चंदन", 2: "पांढरे चंदन", 3: "लाल फुले", 4: "दुर्वा/तूप", 5: "हळद", 6: "दही", 7: "काळे तीळ"}
+    return dravya.get(vaar_num, "जल")
 
 def get_daan_dravya(vaar_num: int) -> str:
-    daan = {1: "à¤—à¤¹à¥‚, à¤—à¥‚à¤³, à¤¤à¤¾à¤‚à¤¬à¥‡", 2: "à¤¤à¤¾à¤‚à¤¦à¥‚à¤³, à¤¦à¥‚à¤§, à¤šà¤¾à¤‚à¤¦à¥€", 3: "à¤®à¤¸à¥‚à¤°, à¤²à¤¾à¤² à¤µà¤¸à¥ à¤¤à¥ à¤°", 4: "à¤®à¥‚à¤—, à¤¹à¤¿à¤°à¤µà¥‡ à¤µà¤¸à¥ à¤¤à¥ à¤°", 5: "à¤šà¤£à¤¾ à¤¡à¤¾à¤³, à¤¹à¤³à¤¦", 6: "à¤¤à¤¾à¤‚à¤¦à¥‚à¤³, à¤¸à¤¾à¤–à¤°, à¤ªà¤¾à¤‚à¤¢à¤°à¥‡ à¤µà¤¸à¥ à¤¤à¥ à¤°", 7: "à¤•à¤¾à¤³à¥‡ à¤¤à¥€à¤³, à¤‰à¤¡à¥€à¤¦, à¤¤à¥‡à¤²"}
-    return daan.get(vaar_num, "à¤…à¤¨à¥ à¤¨ à¤¦à¤¾à¤¨")
+    daan = {1: "गहू, गूळ, तांबे", 2: "तांदूळ, दूध, चांदी", 3: "मसूर, लाल वस्त्र", 4: "मूग, हिरवे वस्त्र", 5: "चणा डाळ, हळद", 6: "तांदूळ, साखर, पांढरे वस्त्र", 7: "काळे तीळ, उडीद, तेल"}
+    return daan.get(vaar_num, "अन्न दान")
 
 def get_tara_chakra(birth_nakshatra_num: int, current_nakshatra_num: int) -> list:
     tara_names = [
-        {"name": "à¤œà¤¨à¥ à¤®", "type": "Ashubh", "color": "red"},
-        {"name": "à¤¸à¤‚à¤ªà¤¤", "type": "Shubh", "color": "green"},
-        {"name": "à¤µà¤¿à¤ªà¤¤", "type": "Ashubh", "color": "red"},
-        {"name": "à¤•à¥ à¤·à¥‡à¤®", "type": "Shubh", "color": "green"},
-        {"name": "à¤ªà¥ à¤°à¤¤à¥ à¤¯à¤°à¥€", "type": "Ashubh", "color": "red"},
-        {"name": "à¤¸à¤¾à¤§à¤•", "type": "Shubh", "color": "green"},
-        {"name": "à¤µà¤§", "type": "Ashubh", "color": "red"},
-        {"name": "à¤®à¤¿à¤¤à¥ à¤°", "type": "Shubh", "color": "green"},
-        {"name": "à¤…à¤¤à¤¿à¤®à¤¿à¤¤à¥ à¤°", "type": "Shubh", "color": "green"}
+        {"name": "जन्म", "type": "Ashubh", "color": "red"},
+        {"name": "संपत", "type": "Shubh", "color": "green"},
+        {"name": "विपत", "type": "Ashubh", "color": "red"},
+        {"name": "क्षेम", "type": "Shubh", "color": "green"},
+        {"name": "प्रत्यरी", "type": "Ashubh", "color": "red"},
+        {"name": "साधक", "type": "Shubh", "color": "green"},
+        {"name": "वध", "type": "Ashubh", "color": "red"},
+        {"name": "मित्र", "type": "Shubh", "color": "green"},
+        {"name": "अतिमित्र", "type": "Shubh", "color": "green"}
     ]
     mapping = []
     for i in range(1, 28):
@@ -120,16 +120,14 @@ def get_tara_chakra(birth_nakshatra_num: int, current_nakshatra_num: int) -> lis
     return mapping
 
 def get_ghatachakra(rashi_num: int) -> Dict[str, Any]:
-    # Placeholder mapping
-    months = {1: "à¤šà¥ˆà¤¤à¥ à¤°", 2: "à¤µà¥ˆà¤¶à¤¾à¤–", 3: "à¤œà¥ à¤¯à¥‡à¤·à¥ à¤ "}
-    return {"name": "à¤˜à¤¾à¤¤à¤šà¤•à¥ à¤° (Ghatachakra)", "status": "Active", "desc": "à¤®à¤¾à¤¹à¤¿à¤¤à¥€ à¤‰à¤ªà¤²à¤¬à¥ à¤§ à¤¨à¤¾à¤¹à¥€"}
+    return {"name": "घातचक्र (Ghatachakra)", "status": "Active", "desc": "माहिती उपलब्ध नाही"}
 
 def get_shul_chakras(vaar_num: int, tithi_num: int, nak_num: int) -> Dict[str, Any]:
     disha_shul = {
-        1: "à¤ªà¤¶à¥ à¤šà¤¿à¤® (West)", 2: "à¤ªà¥‚à¤°à¥ à¤µ (East)", 3: "à¤‰à¤¤à¥ à¤¤à¤° (North)", 
-        4: "à¤‰à¤¤à¥ à¤¤à¤° (North)", 5: "à¤¦à¤•à¥ à¤·à¤¿à¤£ (South)", 6: "à¤ªà¤¶à¥ à¤šà¤¿à¤® (West)", 7: "à¤ªà¥‚à¤°à¥ à¤µ (East)"
+        1: "पश्चिम (West)", 2: "पूर्व (East)", 3: "उत्तर (North)", 
+        4: "उत्तर (North)", 5: "दक्षिण (South)", 6: "पश्चिम (West)", 7: "पूर्व (East)"
     }
-    yatra_shul = "à¤¶à¥ à¤­" if vaar_num in [4,5] else "à¤…à¤¶à¥ à¤­"
+    yatra_shul = "शुभ" if vaar_num in [4,5] else "अशुभ"
     
     return {
         "disha_shul": disha_shul.get(vaar_num, "None"),
@@ -140,22 +138,22 @@ def get_shul_chakras(vaar_num: int, tithi_num: int, nak_num: int) -> Dict[str, A
     }
 
 def get_yogas_doshas(vaar_num: int, tithi_num: int, nak_num: int, sun_lon: float) -> Dict[str, Any]:
-    anandadi = ["à¤†à¤¨à¤‚à¤¦", "à¤•à¤¾à¤²à¤¦à¤‚à¤¡", "à¤§à¥‚à¤®à¥ à¤°", "à¤ªà¥ à¤°à¤œà¤¾à¤ªà¤¤à¥€", "à¤¸à¥Œà¤®à¥ à¤¯", "à¤•à¤¾à¤‚à¤•à¥ à¤·", "à¤§à¥ à¤µà¤œ", "à¤¶à¥ à¤°à¥€à¤µà¤¤à¥ à¤¸", "à¤µà¤œà¥ à¤°", "à¤®à¥ à¤¦à¥ à¤—à¤°", "à¤›à¤¤à¥ à¤°", "à¤®à¤¿à¤¤à¥ à¤°", "à¤®à¤¾à¤¨à¤¸", "à¤ªà¤¦à¥ à¤®", "à¤²à¥ à¤‚à¤¬", "à¤‰à¤¤à¥ à¤ªà¤¾à¤¤", "à¤®à¥ƒà¤¤à¥ à¤¯à¥‚", "à¤•à¤¾à¤£", "à¤¸à¤¿à¤¦à¥ à¤§à¥€", "à¤¶à¥ à¤­", "à¤…à¤®à¥ƒà¤¤", "à¤®à¥ à¤¸à¤³", "à¤—à¤¦", "à¤®à¤¾à¤¤à¤‚à¤—", "à¤°à¤¾à¤•à¥ à¤·à¤¸", "à¤šà¤°, à¤¸à¥ à¤¥à¤¿à¤°", "à¤µà¤°à¥ à¤§à¤®à¤¾à¤¨"]
+    anandadi = ["आनंद", "कालदंड", "धूम्र", "प्रजापती", "सौम्य", "कांकक्ष", "ध्वज", "श्रीवत्स", "वज्र", "मुद्गर", "छत्र", "मित्र", "मानस", "पद्म", "लुंब", "उत्पात", "मृत्यू", "काण", "सिद्धी", "शुभ", "अमृत", "मुसळ", "गद", "मातंग", "राक्षस", "चर, स्थिर", "वर्धमान"]
     idx = (nak_num + vaar_num) % 28
     anandadi_yoga = anandadi[idx % len(anandadi)]
 
-    panchban = "à¤…à¤—à¥ à¤¨à¥€ à¤¬à¤¾à¤£" if (int(sun_lon/13.33) % 2 == 0) else "à¤¬à¤¾à¤£ à¤¦à¥‹à¤· à¤¨à¤¾à¤¹à¥€"
-    panchshul = "à¤¶à¥‚à¤² à¤¦à¥‹à¤· à¤¨à¤¾à¤¹à¥€"
-    gand_mool = "à¤¹à¥‹à¤¯ (Gand Mool)" if nak_num in [1, 9, 10, 18, 19, 27] else "à¤¨à¤¾à¤¹à¥€ (No)"
+    panchban = "अग्नी बाण" if (int(sun_lon/13.33) % 2 == 0) else "बाण दोष नाही"
+    panchshul = "शूल दोष नाही"
+    gand_mool = "होय (Gand Mool)" if nak_num in [1, 9, 10, 18, 19, 27] else "नाही (No)"
     
     return {
-        "anandadi_yoga": f"{anandadi_yoga} à¤¯à¥‹à¤—",
+        "anandadi_yoga": f"{anandadi_yoga} योग",
         "panchban": panchban,
         "panchshul": panchshul,
         "gand_mool": gand_mool,
-        "yaamardh": "2.5 à¤¤à¤¾à¤¸",
-        "mahendra_sanjnak": "à¤¶à¥ à¤­ à¤®à¥ à¤¹à¥‚à¤°à¥ à¤¤",
-        "goraksh_gaman": "à¤¶à¥ à¤­ à¤®à¥ à¤¹à¥‚à¤°à¥ à¤¤"
+        "yaamardh": "2.5 तास",
+        "mahendra_sanjnak": "शुभ मुहूर्त",
+        "goraksh_gaman": "शुभ मुहूर्त"
     }
 
 def get_specific_times(sun_times: Dict[str, Any], vaar_num: int) -> Dict[str, Any]:
