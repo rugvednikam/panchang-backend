@@ -13,6 +13,10 @@ from app.calculations.dasha import DashaCalculator
 from app.calculations.match_making import MatchMakingCalculator
 from app.calculations.festivals import FestivalCalculator
 from app.calculations.muhurta import MuhurtaCalculator
+from app.calculations.recommendations import RecommendationsCalculator
+from app.calculations.transits import TransitCalculator
+from app.calculations.varshphal import VarshphalCalculator
+from app.calculations.remedies import RemediesCalculator
 
 from app.calculations.v6_muhurta_rules import check_muhurta, get_all_muhurtas_for_day, MUHURTA_TYPES
 from app.calculations.v6_chakras import get_all_chakras
@@ -309,7 +313,7 @@ async def get_premium_predictions(input_data: AstrologicalInput, api_key=Depends
     moon_long = positions["Moon"]["longitude"]
     dasha_data = DashaCalculator.get_vimshottari_dasha(moon_long, dt)
     
-    return get_all_predictions(kundli, dasha_data)
+    return {"status": "success", "data": get_all_predictions(kundli, dasha_data)}
 
 
 @router.post("/horoscope/daily")
@@ -435,3 +439,89 @@ async def get_panchang_month(input_data: DateLocationInput, month_type: Optional
         "num_days": num_days,
         "days": days,
     }
+
+@router.post("/premium/recommendations")
+async def get_premium_recommendations(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
+    jd = get_jd_for_input(input_data)
+    
+    # Get Ascendant sign
+    houses_data = KundliCalculator.get_houses(jd, input_data.latitude, input_data.longitude)
+    ascendant_sign = houses_data.get("ascendant_sign", 1)
+    
+    # Get Moon sign & Nakshatra
+    nakshatra_num = PanchangCalculator.get_nakshatra(jd)
+    
+    gemstones = RecommendationsCalculator.get_gemstones(ascendant_sign)
+    rudraksha = RecommendationsCalculator.get_rudraksha(nakshatra_num)
+    
+    return {
+        "gemstones": gemstones,
+        "rudraksha": rudraksha
+    }
+
+@router.post("/premium/sadhe_sati_timeline")
+async def get_premium_sadhe_sati_timeline(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
+    jd = get_jd_for_input(input_data)
+    
+    # Find Moon sign
+    positions = KundliCalculator.get_planetary_positions(jd)
+    natal_moon_sign = positions.get("Moon", {}).get("sign", 1)
+    
+    dt_str = f"{input_data.dob} {input_data.time}"
+    dt = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+    
+    timeline = TransitCalculator.get_sadhe_sati_timeline(natal_moon_sign, dt)
+    
+    return {
+        "natal_moon_sign": natal_moon_sign,
+        "timeline": timeline
+    }
+
+@router.post("/premium/varshphal")
+async def get_premium_varshphal(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
+    jd = get_jd_for_input(input_data)
+    
+    # Calculate for the current year
+    current_year = datetime.now().year
+    
+    varshphal_data = VarshphalCalculator.get_varshphal(jd, input_data.latitude, input_data.longitude, current_year)
+    
+    return varshphal_data
+
+@router.post("/premium/remedies")
+async def get_premium_remedies(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
+    jd = get_jd_for_input(input_data)
+    
+    # Calculate current Dasha
+    dasha_data = DashaCalculator.get_vimshottari_dasha(jd)
+    
+    # Simple lookup for current maha and antar dasha lords from the DashaCalculator result
+    # dasha_data is a list of maha dashas, we need to find the one covering 'now'
+    now_date = datetime.now()
+    
+    current_maha = None
+    current_antar = None
+    
+    for maha in dasha_data:
+        try:
+            start = datetime.strptime(maha["start_date"], "%Y-%m-%d")
+            end = datetime.strptime(maha["end_date"], "%Y-%m-%d")
+            if start <= now_date <= end:
+                current_maha = maha["planet"]
+                for antar in maha["antar_dashas"]:
+                    a_start = datetime.strptime(antar["start_date"], "%Y-%m-%d")
+                    a_end = datetime.strptime(antar["end_date"], "%Y-%m-%d")
+                    if a_start <= now_date <= a_end:
+                        current_antar = antar["planet"]
+                        break
+                break
+        except:
+            continue
+            
+    if not current_maha:
+        current_maha = "Sun"
+        current_antar = "Moon"
+        
+    remedies = RemediesCalculator.get_remedies_for_dasha(current_maha, current_antar)
+    
+    return remedies

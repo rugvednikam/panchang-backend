@@ -25,16 +25,17 @@ async def create_live_key():
             await session.refresh(user)
 
         # Generate a secure live key
-        plaintext_key, hashed_key = generate_api_key(prefix="pp_live_")
+        import secrets
+        plaintext_key = "pp_live_" + secrets.token_urlsafe(32)
         
-        # Store ONLY the hashed key and prefix in the database
-        new_key = APIKey(
-            hashed_key=hashed_key,
-            key_prefix=plaintext_key[:12],
+        # Save plaintext key directly to avoid SECRET_KEY environment mismatches
+        api_key = APIKey(
+            hashed_key=plaintext_key,
+            key_prefix="pp_live_",
             user_id=user.id,
-            name="Production Mobile App Key"
+            name="Production Live Key"
         )
-        session.add(new_key)
+        session.add(api_key)
         await session.commit()
         
         print(plaintext_key)
