@@ -493,35 +493,34 @@ async def get_premium_varshphal(input_data: AstrologicalInput, api_key=Depends(g
 async def get_premium_remedies(input_data: AstrologicalInput, api_key=Depends(get_api_key)):
     jd = get_jd_for_input(input_data)
     
-    # Calculate current Dasha
-    dasha_data = DashaCalculator.get_vimshottari_dasha(jd)
+    positions = KundliCalculator.get_planetary_positions(jd)
+    moon_longitude = positions.get("Moon", {}).get("longitude", 0.0)
     
-    # Simple lookup for current maha and antar dasha lords from the DashaCalculator result
-    # dasha_data is a list of maha dashas, we need to find the one covering 'now'
+    dt_str = f"{input_data.dob} {input_data.time}"
+    birth_date = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+
+    # Calculate current Dasha
+    dasha_data = DashaCalculator.get_vimshottari_dasha(moon_longitude, birth_date)
+    
     now_date = datetime.now()
     
     current_maha = None
     current_antar = None
     
-    for maha in dasha_data:
+    periods = dasha_data.get("periods", [])
+    
+    for maha in periods:
         try:
-            start = datetime.strptime(maha["start_date"], "%Y-%m-%d")
-            end = datetime.strptime(maha["end_date"], "%Y-%m-%d")
+            start = datetime.fromisoformat(maha["start_date"])
+            end = datetime.fromisoformat(maha["end_date"])
             if start <= now_date <= end:
                 current_maha = maha["planet"]
-                for antar in maha["antar_dashas"]:
-                    a_start = datetime.strptime(antar["start_date"], "%Y-%m-%d")
-                    a_end = datetime.strptime(antar["end_date"], "%Y-%m-%d")
-                    if a_start <= now_date <= a_end:
-                        current_antar = antar["planet"]
-                        break
                 break
         except:
             continue
             
     if not current_maha:
         current_maha = "Sun"
-        current_antar = "Moon"
         
     remedies = RemediesCalculator.get_remedies_for_dasha(current_maha, current_antar)
     
