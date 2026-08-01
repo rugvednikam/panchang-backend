@@ -449,7 +449,8 @@ async def get_premium_recommendations(input_data: AstrologicalInput, api_key=Dep
     ascendant_sign = houses_data.get("ascendant_sign", 1)
     
     # Get Moon sign & Nakshatra
-    nakshatra_num = PanchangCalculator.get_nakshatra(jd)
+    nakshatra_data = PanchangCalculator.get_nakshatra(jd)
+    nakshatra_num = nakshatra_data.get("nakshatra_number", 1)
     
     gemstones = RecommendationsCalculator.get_gemstones(ascendant_sign)
     rudraksha = RecommendationsCalculator.get_rudraksha(nakshatra_num)
