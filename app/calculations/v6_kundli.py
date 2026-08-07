@@ -8,7 +8,9 @@ RASHIS = ["Mesha","Vrishabha","Mithuna","Karka","Simha","Kanya","Tula","Vrishchi
 def get_rashi(deg):
     return RASHIS[int(deg/30)]
 def get_kundli(dt: datetime, lat: float, lon: float, outer_planets: bool = False):
-    jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60.0)
+    from app.calculations.ultimate_engine import get_timezone_offset_free
+    offset = get_timezone_offset_free(lat, lon)["offset_hours"]
+    jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60.0 - offset)
     swe.set_sid_mode(swe.SIDM_LAHIRI)
     planets_data = []
     
@@ -33,7 +35,9 @@ def get_planet_nakshatra_map(dt, lat, lon):
     import swisseph as swe
     swe.set_ephe_path('.')
     swe.set_sid_mode(swe.SIDM_LAHIRI)
-    jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60.0)
+    from app.calculations.ultimate_engine import get_timezone_offset_free
+    offset = get_timezone_offset_free(lat, lon)["offset_hours"]
+    jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60.0 - offset)
     mapping = {}
     for pid, name in [(swe.SUN,"Ravi"),(swe.MOON,"Chandra"),(swe.MARS,"Mangal"),(swe.MERCURY,"Budh"),(swe.JUPITER,"Guru"),(swe.VENUS,"Shukra"),(swe.SATURN,"Shani"),(swe.TRUE_NODE,"Rahu")]:
         deg = swe.calc_ut(jd, pid, swe.FLG_SIDEREAL)[0][0] % 360

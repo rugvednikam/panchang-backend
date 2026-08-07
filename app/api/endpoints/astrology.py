@@ -525,3 +525,12 @@ async def get_premium_remedies(input_data: AstrologicalInput, api_key=Depends(ge
     remedies = RemediesCalculator.get_remedies_for_dasha(current_maha, current_antar)
     
     return remedies
+
+from app.calculations.ultimate_engine import search_place_worldwide_free_nominatim
+
+@router.get("/location/search")
+async def search_location(query: str, api_key=Depends(get_api_key)):
+    result = search_place_worldwide_free_nominatim(query)
+    if not result:
+        return {"error": "Location not found"}
+    return result
